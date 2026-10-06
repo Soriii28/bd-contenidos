@@ -104,7 +104,7 @@ Departamento[1..1] -> Ubicacion_Departamento[1..N]
 ---
 ### Diagrama resultante en notación crow's foot
 
-![](../../imgs/BD%20Empresa%20versión%20final%20Crows%20Foot.png)
+![](BD%20Empresa%20versión%20final%20Crows%20Foot.png)
 
 >[!tip] Retoques posteriores del diagrama
 >Recuerda que, aunque en la notación textual sí están incluidos los atributos de relación *horas* en *trabaja_en* y *fecha_ingreso_director* en *dirige*, al mostrarlo de forma gráfica no aparecen y se han añadido de forma manual al diagrama. Del mismo modo, el subrayado discontinuo en los atributos *nombre* de *Proyecto* y *nombre* de *Departamento* se ha añadido de forma manual al diagrama para indicar que son atributos de tipo UNIQUE 

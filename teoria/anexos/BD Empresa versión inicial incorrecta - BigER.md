@@ -89,7 +89,7 @@ Familiar[1..N] -> Empleado[0..1]
 ---
 ### Diagrama resultante en notación crow's foot
 
-![](../../imgs/BD%20Empresa%20versión%20inicial%20incorrecta%20Crows%20Foot.png)
+![](BD%20Empresa%20versión%20inicial%20incorrecta%20Crows%20Foot.png)
 
 >[!tip] Atributos de relaciones
 >Recuerda que, aunque en la notación textual sí están incluidos los atributos de relación *horas* en *trabaja_en* y *fecha_ingreso_director* en *dirige*, al mostrarlo de forma gráfica no aparecen y se han añadido de forma manual al diagrama. Del mismo modo, el subrayado discontinuo en los atributos *nombre* de *Proyecto* y *nombre* de *Departamento* se ha añadido de forma manual al diagrama para indicar que son atributos de tipo UNIQUE 
