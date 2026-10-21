@@ -817,7 +817,7 @@ order by total_horas_dedicadas desc;
 terminar
 Tabla resultado:
 
-| nombre_departamento | num_proyectos | total_horas_dedicadas | 
+| nombre_departamento | num_proyectos | total_horas_dedicadas |
 | ------------------- | ------------- | --------------------- |
 | Investigación       | 3             | 140                   |
 | Administración      | 2             | 110                   |
