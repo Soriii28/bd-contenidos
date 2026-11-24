@@ -1,0 +1,66 @@
+erdiagram EjemploAsociativas
+notation = crowsfoot
+
+entity Puesto_de_Trabajo {
+    id_puesto key
+    nombre_puesto
+}
+
+entity Competencia {
+    id_competencia key
+    nombre_competencia
+}
+
+
+entity Validador {
+    id_validador key
+    rol_empresa
+}
+
+associative entity Requisito_Puesto {
+}
+
+associative relationship requiere {
+    Puesto_de_Trabajo[1..1] -> Requisito_Puesto[1..N]
+}
+
+associative relationship es_requerida_por {
+    Competencia[1..1] -> Requisito_Puesto[1..N]
+}
+
+relationship validado_por {
+    Requisito_Puesto[0..N] -> Validador[1..1]
+}
+
+entity Profesor {
+    nif key
+    nombre
+    apellido_1
+    apellido_2
+}
+
+entity Asignatura {
+    codigo key
+    nombre
+}
+
+entity Aula {
+    id_aula key
+    nombre unique
+    ubicacion
+}
+
+associative entity Encargo_Docente {
+}
+
+associative relationship imparte {
+    Profesor[1..1] -> Encargo_Docente[1..N]
+}
+
+associative relationship impartida_en {
+    Asignatura[1..1] -> Encargo_Docente[1..N]
+}
+
+relationship se_imparte_en {
+    Aula[0..1] -> Encargo_Docente[0..N]
+}

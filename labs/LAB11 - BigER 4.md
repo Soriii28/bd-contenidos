@@ -188,6 +188,40 @@ Modela el encargo docente como una entidad asociativa llamada **Encargo_Docente*
 ![](../imgs/BD%20-%20BigER%20Ternaria%20Falsa.png)
 
 Escribe el texto BigER necesario y visualiza el resultado en el diagrama en VS Code. Antes de continuar, asegúrate de entender por qué no es una relación ternaria.
+```erdiagram
+entity Profesor {
+    nif key
+    nombre
+    apellido_1
+    apellido_2
+}
+
+entity Asignatura {
+    codigo key
+    nombre
+}
+
+entity Aula {
+    id_aula key
+    nombre unique
+    ubicacion
+}
+
+associative entity Encargo_Docente {
+}
+
+associative relationship imparte {
+    Profesor[1..1] -> Encargo_Docente[1..N]
+}
+
+associative relationship impartida_en {
+    Asignatura[1..1] -> Encargo_Docente[1..N]
+}
+
+relationship se_imparte_en {
+    Aula[0..1] -> Encargo_Docente[0..N]
+}
+```
 
 ---
 ## Resolución del Enunciado ER 11 Colegio de Enseñanza de Primaria
@@ -228,6 +262,51 @@ Las diferencias son:
 Con todo esto, ya podemos suponer que vamos a crear una jerarquía con la superclase **Persona** y las subclases **Tutora** y **Docente**. Para decidir sus restricciones, piensa si puede haber personas que no sean ni tutoras ni docentes, y fíjate en la última frase del tercer párrafo.
 
 Escribe el texto BigER necesario para modelar todas estas entidades y la relación a_cargo_de, y visualiza el resultado en el diagrama en VS Code. Antes de continuar, asegúrate de entender cómo se está representando gráficamente todo.
+```erdiagram
+entity Estudiante {
+    numero_expediente key
+    nombre
+    apellido_1
+    apellido_2
+    sexo
+    fecha_nacimiento
+}
+
+hierarchy por_tipo Estudiante partial
+
+entity Estudiante_Especial extends por_tipo {
+    numero_expediente key
+    descripcion
+    atencion_especial
+}
+
+entity Persona {
+    nif key
+    nombre
+    apellido_1
+    apellido_2
+    telefono
+    direccion
+}
+
+hierarchy tipo_persona Persona total overlapping
+
+entity Tutora extends tipo_persona {
+    nif key
+    profesion
+}
+
+entity Docente extends tipo_persona {
+    nif key
+    salario
+    cuenta
+}
+
+relationship a_cargo_de {
+    Tutora[1..N] -> Estudiante[1..N]
+    relacion
+}
+```
 
 ---
 ### Ejercicio 03 - Enunciado ER 11 Colegio de Enseñanza de Primaria  (2)
@@ -250,6 +329,69 @@ Vamos ahora a modelar los objetivos de aprendizaje. Tal y como nos dice el enunc
 Todo esto nos tiene que llevar a modelar **Objetivo_Aprendizaje** como **entidad débil** que depende de Curso, con el código del objetivo como clave parcial (`codigo_objetivo`) y su descripción (`descripcion_objetivo`), y a unirla con Curso mediante la **relación débil** **tiene**.
 
 Escribe el texto BigER necesario para modelar estas dos entidades y estas dos relaciones, y visualiza el resultado en el diagrama en VS Code. Antes de continuar, asegúrate de entender cómo se está representando gráficamente todo.
+```erdiagram
+entity Estudiante {
+    numero_expediente key
+    nombre
+    apellido_1
+    apellido_2
+    sexo
+    fecha_nacimiento
+}
+
+hierarchy por_tipo Estudiante partial
+
+entity Estudiante_Especial extends por_tipo {
+    numero_expediente key
+    descripcion
+    atencion_especial
+}
+
+entity Persona {
+    nif key
+    nombre
+    apellido_1
+    apellido_2
+    telefono
+    direccion
+}
+
+hierarchy tipo_persona Persona total overlapping
+
+entity Tutora extends tipo_persona {
+    nif key
+    profesion
+}
+
+entity Docente extends tipo_persona {
+    nif key
+    salario
+    cuenta
+}
+
+relationship a_cargo_de {
+    Tutora[1..N] -> Estudiante[1..N]
+    relacion
+}
+
+entity Curso {
+    numero_curso key
+    descripcion_curso
+}
+
+relationship responsable_de {
+    Docente[1..1] -> Curso[0..1]
+}
+
+weak entity Objetivo_Aprendizaje {
+    codigo_objetivo partial-key
+    descripcion_objetivo
+}
+
+weak relationship tiene {
+    Curso[1..1] -> Objetivo_Aprendizaje[1..N]
+}
+```
 
 ---
 ### Ejercicio 04 - Enunciado ER 11 Colegio de Enseñanza de Primaria  (3)
@@ -297,6 +439,103 @@ Además, necesitamos crear las dos **relaciones asociativas** que la unen con la
 Ahora ya podemos modelar que "una asignatura en un curso sea impartida por un único docente" y que "un docente podría impartir varias". Para ello crearemos la relación **imparte** entre Docente y Asignatura_Curso.
 
 Escribe el texto BigER necesario para modelar estas 3 nuevas entidades y las 5 relaciones indicadas, y visualiza el resultado en el diagrama en VS Code. Antes de continuar, asegúrate de entender cómo se está representando gráficamente todo.
+```erdiagram
+entity Estudiante {
+    numero_expediente key
+    nombre
+    apellido_1
+    apellido_2
+    sexo
+    fecha_nacimiento
+}
+
+hierarchy por_tipo Estudiante partial
+
+entity Estudiante_Especial extends por_tipo {
+    numero_expediente key
+    descripcion
+    atencion_especial
+}
+
+entity Persona {
+    nif key
+    nombre
+    apellido_1
+    apellido_2
+    telefono
+    direccion
+}
+
+hierarchy tipo_persona Persona total overlapping
+
+entity Tutora extends tipo_persona {
+    nif key
+    profesion
+}
+
+entity Docente extends tipo_persona {
+    nif key
+    salario
+    cuenta
+}
+
+relationship a_cargo_de {
+    Tutora[1..N] -> Estudiante[1..N]
+    relacion
+}
+
+entity Curso {
+    numero_curso key
+    descripcion_curso
+}
+
+relationship responsable_de {
+    Docente[1..1] -> Curso[0..1]
+}
+
+weak entity Objetivo_Aprendizaje {
+    codigo_objetivo partial-key
+    descripcion_objetivo
+}
+
+weak relationship tiene {
+    Curso[1..1] -> Objetivo_Aprendizaje[1..N]
+}
+
+entity Departamento {
+    codigo_departamento key
+    nombre_departamento
+}
+
+entity Asignatura {
+    codigo_asignatura key
+    nombre_asignatura
+}
+
+relationship pertenece_a {
+    Docente[1..N] -> Departamento[1..1]
+}
+
+relationship organiza {
+    Departamento[1..1] -> Asignatura[1..N]
+}
+
+associative entity Asignatura_Curso {
+    horas
+}
+
+associative relationship se_imparte_en {
+    Asignatura[1..1] -> Asignatura_Curso[1..N]
+}
+
+associative relationship consta_de {
+    Curso[1..1] -> Asignatura_Curso[1..N]
+}
+
+relationship imparte {
+    Docente[1..1] -> Asignatura_Curso[1..N]
+}
+```
 
 ---
 
@@ -316,6 +555,111 @@ Este párrafo final ya deberíamos poder modelarlo sin más pistas. Aun así, f�
 - Atributos para la relación `matriculado` (`fecha`, `nota_1`, `nota_2`, `nota_3`).
 
 Escribe el texto BigER necesario para modelar lo indicado en ese párrafo y visualiza el resultado en el diagrama en VS Code. Antes de continuar, asegúrate de entender cómo se está representando gráficamente todo.
+```erdiagram
+entity Estudiante {
+    numero_expediente key
+    nombre
+    apellido_1
+    apellido_2
+    sexo
+    fecha_nacimiento
+}
+
+hierarchy por_tipo Estudiante partial
+
+entity Estudiante_Especial extends por_tipo {
+    numero_expediente key
+    descripcion
+    atencion_especial
+}
+
+entity Persona {
+    nif key
+    nombre
+    apellido_1
+    apellido_2
+    telefono
+    direccion
+}
+
+hierarchy tipo_persona Persona total overlapping
+
+entity Tutora extends tipo_persona {
+    nif key
+    profesion
+}
+
+entity Docente extends tipo_persona {
+    nif key
+    salario
+    cuenta
+}
+
+relationship a_cargo_de {
+    Tutora[1..N] -> Estudiante[1..N]
+    relacion
+}
+
+entity Curso {
+    numero_curso key
+    descripcion_curso
+}
+
+relationship responsable_de {
+    Docente[1..1] -> Curso[0..1]
+}
+
+weak entity Objetivo_Aprendizaje {
+    codigo_objetivo partial-key
+    descripcion_objetivo
+}
+
+weak relationship tiene {
+    Curso[1..1] -> Objetivo_Aprendizaje[1..N]
+}
+
+entity Departamento {
+    codigo_departamento key
+    nombre_departamento
+}
+
+entity Asignatura {
+    codigo_asignatura key
+    nombre_asignatura
+}
+
+relationship pertenece_a {
+    Docente[1..N] -> Departamento[1..1]
+}
+
+relationship organiza {
+    Departamento[1..1] -> Asignatura[1..N]
+}
+
+associative entity Asignatura_Curso {
+    horas
+}
+
+associative relationship se_imparte_en {
+    Asignatura[1..1] -> Asignatura_Curso[1..N]
+}
+
+associative relationship consta_de {
+    Curso[1..1] -> Asignatura_Curso[1..N]
+}
+
+relationship imparte {
+    Docente[1..1] -> Asignatura_Curso[1..N]
+}
+
+relationship matriculado {
+    Estudiante[1..N] -> Asignatura_Curso[1..N]
+    fecha
+    nota_1
+    nota_2
+    nota_3
+}
+```
 
 ---
 ## Resolución del Enunciado ER 13 Todas Tus Series
@@ -345,6 +689,44 @@ Esta parte es muy sencilla y no debería suponer ningún problema llevarla a cab
 > **Nombres para el comprobador**: las entidades `Serie` (`id_serie`, `titulo`, `sinopsis`, `fecha_lanzamiento`, `estado`), `Productora` (`id_productora`, `nombre`, `url`), `Genero` (`id_genero`, `nombre`, `descripcion`) y `Clasificacion_Edad` (`id_clasificacion`, `edad_minima`), y las relaciones `producida_por`, `clasificada_como` y `tiene_clasificacion`.
 
 Escribe el texto BigER necesario para modelar todas estas entidades y relaciones y visualiza el resultado en el diagrama en VS Code. Antes de continuar, asegúrate de entender cómo se está representando gráficamente todo.
+```erdiagram
+entity Serie {
+    id_serie key
+    titulo
+    sinopsis
+    fecha_lanzamiento
+    estado
+}
+
+entity Productora {
+    id_productora key
+    nombre
+    url
+}
+
+entity Genero {
+    id_genero key
+    nombre
+    descripcion
+}
+
+entity Clasificacion_Edad {
+    id_clasificacion key
+    edad_minima
+}
+
+relationship producida_por {
+    Productora[1..N] -> Serie[1..N]
+}
+
+relationship clasificada_como {
+    Genero[1..N] -> Serie[0..N]
+}
+
+relationship tiene_clasificacion {
+    Clasificacion_Edad[1..1] -> Serie[0..N]
+}
+```
 
 ---
 ### Ejercicio 07 - Enunciado ER 13 Todas Tus Series  (2)
@@ -363,6 +745,78 @@ De esta parte, pon especial atención a las posibles entidades débiles. Fíjate
 > **Nombres para el comprobador**: las entidades `Temporada` (`numero_temporada`, `novedades`), `Episodio` (`numero_episodio`, `titulo`, `fecha_primera_emision`, `duracion`, `sinopsis`) e `Idioma` (`id_idioma`, `nombre`), y las relaciones `pertenece_a`, `contiene`, `audio_disponible` y `subtitulos_disponibles`.
 
 Escribe el texto BigER necesario para modelar todas estas entidades y relaciones y visualiza el resultado en el diagrama en VS Code. Antes de continuar, asegúrate de entender cómo se está representando gráficamente todo.
+```erdiagram
+entity Serie {
+    id_serie key
+    titulo
+    sinopsis
+    fecha_lanzamiento
+    estado
+}
+
+entity Productora {
+    id_productora key
+    nombre
+    url
+}
+
+entity Genero {
+    id_genero key
+    nombre
+    descripcion
+}
+
+entity Clasificacion_Edad {
+    id_clasificacion key
+    edad_minima
+}
+
+relationship producida_por {
+    Productora[1..N] -> Serie[1..N]
+}
+
+relationship clasificada_como {
+    Genero[1..N] -> Serie[0..N]
+}
+
+relationship tiene_clasificacion {
+    Clasificacion_Edad[1..1] -> Serie[0..N]
+}
+
+weak entity Temporada {
+    numero_temporada partial-key
+    novedades
+}
+
+weak entity Episodio {
+    numero_episodio partial-key
+    titulo
+    fecha_primera_emision
+    duracion
+    sinopsis
+}
+
+entity Idioma {
+    id_idioma key
+    nombre
+}
+
+weak relationship pertenece_a {
+    Temporada[1..N] -> Serie[1..1]
+}
+
+weak relationship contiene {
+    Episodio[1..N] -> Temporada[1..1]
+}
+
+relationship audio_disponible {
+    Episodio[0..N] -> Idioma[1..N]
+}
+
+relationship subtitulos_disponibles {
+    Episodio[0..N] -> Idioma[0..N]
+}
+```
 
 ---
 ### Ejercicio 08 - Enunciado ER 13 Todas Tus Series  (3)
@@ -379,6 +833,123 @@ De esta parte, pon especial atención a las actuaciones de los intérpretes haci
 > **Nombres para el comprobador**: las entidades `Persona` (`id_persona`, `nombre`, `apellido`, `fecha_nacimiento`, `nacionalidad`, `bio`), `Creador`, `Director`, `Interprete` (`nombre_artistico`) y `Personaje` (`id_personaje`, `nombre`, `descripcion`), y las relaciones `ha_creado`, `dirige_episodio` y `actuacion` (`minutos`, `version_del_personaje`).
 
 Escribe el texto BigER necesario para modelar todas estas entidades y relaciones y visualiza el resultado en el diagrama en VS Code. Antes de continuar, asegúrate de entender cómo se está representando gráficamente todo.
+```erdiagram
+entity Serie {
+    id_serie key
+    titulo
+    sinopsis
+    fecha_lanzamiento
+    estado
+}
+
+entity Productora {
+    id_productora key
+    nombre
+    url
+}
+
+entity Genero {
+    id_genero key
+    nombre
+    descripcion
+}
+
+entity Clasificacion_Edad {
+    id_clasificacion key
+    edad_minima
+}
+
+relationship producida_por {
+    Productora[1..N] -> Serie[1..N]
+}
+
+relationship clasificada_como {
+    Genero[1..N] -> Serie[0..N]
+}
+
+relationship tiene_clasificacion {
+    Clasificacion_Edad[1..1] -> Serie[0..N]
+}
+
+weak entity Temporada {
+    numero_temporada partial-key
+    novedades
+}
+
+weak entity Episodio {
+    numero_episodio partial-key
+    titulo
+    fecha_primera_emision
+    duracion
+    sinopsis
+}
+
+entity Idioma {
+    id_idioma key
+    nombre
+}
+
+weak relationship pertenece_a {
+    Temporada[1..N] -> Serie[1..1]
+}
+
+weak relationship contiene {
+    Episodio[1..N] -> Temporada[1..1]
+}
+
+relationship audio_disponible {
+    Episodio[0..N] -> Idioma[1..N]
+}
+
+relationship subtitulos_disponibles {
+    Episodio[0..N] -> Idioma[0..N]
+}
+
+entity Persona {
+    id_persona key
+    nombre
+    apellido
+    fecha_nacimiento
+    nacionalidad
+    bio
+}
+
+hierarchy por_tipo Persona total overlapping
+
+entity Creador extends por_tipo {
+    id_persona key
+}
+
+entity Director extends por_tipo {
+    id_persona key
+}
+
+entity Interprete extends por_tipo {
+    id_persona key
+    nombre_artistico
+}
+
+entity Personaje {
+    id_personaje key
+    nombre
+    descripcion
+}
+
+relationship ha_creado {
+    Creador[1..N] -> Serie[1..N]
+}
+
+relationship dirige_episodio {
+    Director[1..N] -> Episodio[1..N]
+}
+
+relationship actuacion {
+    Interprete[1..N] -> Personaje[1..N]
+    Personaje[1..N] -> Episodio[1..N]
+    minutos
+    version_del_personaje
+}
+```
 
 ---
 ### Ejercicio 09 - Enunciado ER 13 Todas Tus Series  (4)
@@ -395,6 +966,142 @@ De esta parte, ten en cuenta especialmente la última frase: "Una serie puede es
 > **Nombres para el comprobador**: las entidades `Plataforma` (`id_plataforma`, `nombre_comercial`, `url`) y `Derechos_Emision` (`fecha_inicio`, `fecha_fin`), y las relaciones `licencia_plataforma` y `derechos_serie`.
 
 Escribe el texto BigER necesario para modelar lo indicado en ese párrafo y visualiza el resultado en el diagrama en VS Code. Antes de continuar, asegúrate de entender cómo se está representando gráficamente todo.
+```erdiagram
+entity Serie {
+    id_serie key
+    titulo
+    sinopsis
+    fecha_lanzamiento
+    estado
+}
+
+entity Productora {
+    id_productora key
+    nombre
+    url
+}
+
+entity Genero {
+    id_genero key
+    nombre
+    descripcion
+}
+
+entity Clasificacion_Edad {
+    id_clasificacion key
+    edad_minima
+}
+
+relationship producida_por {
+    Productora[1..N] -> Serie[1..N]
+}
+
+relationship clasificada_como {
+    Genero[1..N] -> Serie[0..N]
+}
+
+relationship tiene_clasificacion {
+    Clasificacion_Edad[1..1] -> Serie[0..N]
+}
+
+weak entity Temporada {
+    numero_temporada partial-key
+    novedades
+}
+
+weak entity Episodio {
+    numero_episodio partial-key
+    titulo
+    fecha_primera_emision
+    duracion
+    sinopsis
+}
+
+entity Idioma {
+    id_idioma key
+    nombre
+}
+
+weak relationship pertenece_a {
+    Temporada[1..N] -> Serie[1..1]
+}
+
+weak relationship contiene {
+    Episodio[1..N] -> Temporada[1..1]
+}
+
+relationship audio_disponible {
+    Episodio[0..N] -> Idioma[1..N]
+}
+
+relationship subtitulos_disponibles {
+    Episodio[0..N] -> Idioma[0..N]
+}
+
+entity Persona {
+    id_persona key
+    nombre
+    apellido
+    fecha_nacimiento
+    nacionalidad
+    bio
+}
+
+hierarchy por_tipo Persona total overlapping
+
+entity Creador extends por_tipo {
+    id_persona key
+}
+
+entity Director extends por_tipo {
+    id_persona key
+}
+
+entity Interprete extends por_tipo {
+    id_persona key
+    nombre_artistico
+}
+
+entity Personaje {
+    id_personaje key
+    nombre
+    descripcion
+}
+
+relationship ha_creado {
+    Creador[1..N] -> Serie[1..N]
+}
+
+relationship dirige_episodio {
+    Director[1..N] -> Episodio[1..N]
+}
+
+relationship actuacion {
+    Interprete[1..N] -> Personaje[1..N]
+    Personaje[1..N] -> Episodio[1..N]
+    minutos
+    version_del_personaje
+}
+
+entity Plataforma {
+	id_plataforma key
+	nombre_comercial
+	url
+}
+
+weak entity Derechos_Emision {
+	fecha_inicio partial-key
+	fecha_fin
+}
+
+weak relationship licencia_plataforma {
+	Plataforma[1..1] -> Derechos_Emision[1..N]
+}
+
+weak relationship derechos_serie {
+	Serie[1..1] -> Derechos_Emision[1..N]
+}
+```
 
 ---
 ### Ejercicio 10 - Enunciado ER 13 Todas Tus Series  (5)
@@ -411,6 +1118,179 @@ Esta parte, tras haber llegado hasta aquí, seguro que puedes hacerla sin ningun
 > **Nombres para el comprobador**: las entidades `Usuario` (`id_usuario`, `email`, `nombre_usuario`) y `Lista` (`numero_lista`, `nombre`, `descripcion`), y las relaciones `favorita`, `valora_serie` (`puntuacion`, `comentario`), `valora_episodio` (`puntuacion`), `crea_lista`, `incluye_serie` y `compartida_con`.
 
 Escribe el texto BigER necesario para modelar lo indicado en ese párrafo y visualiza el resultado en el diagrama en VS Code. Antes de continuar, asegúrate de entender cómo se está representando gráficamente todo.
+```erdiagram
+entity Serie {
+    id_serie key
+    titulo
+    sinopsis
+    fecha_lanzamiento
+    estado
+}
+
+entity Productora {
+    id_productora key
+    nombre
+    url
+}
+
+entity Genero {
+    id_genero key
+    nombre
+    descripcion
+}
+
+entity Clasificacion_Edad {
+    id_clasificacion key
+    edad_minima
+}
+
+relationship producida_por {
+    Productora[1..N] -> Serie[1..N]
+}
+
+relationship clasificada_como {
+    Genero[1..N] -> Serie[0..N]
+}
+
+relationship tiene_clasificacion {
+    Clasificacion_Edad[1..1] -> Serie[0..N]
+}
+
+weak entity Temporada {
+    numero_temporada partial-key
+    novedades
+}
+
+weak entity Episodio {
+    numero_episodio partial-key
+    titulo
+    fecha_primera_emision
+    duracion
+    sinopsis
+}
+
+entity Idioma {
+    id_idioma key
+    nombre
+}
+
+weak relationship pertenece_a {
+    Temporada[1..N] -> Serie[1..1]
+}
+
+weak relationship contiene {
+    Episodio[1..N] -> Temporada[1..1]
+}
+
+relationship audio_disponible {
+    Episodio[0..N] -> Idioma[1..N]
+}
+
+relationship subtitulos_disponibles {
+    Episodio[0..N] -> Idioma[0..N]
+}
+
+entity Persona {
+    id_persona key
+    nombre
+    apellido
+    fecha_nacimiento
+    nacionalidad
+    bio
+}
+
+hierarchy por_tipo Persona total overlapping
+
+entity Creador extends por_tipo {
+    id_persona key
+}
+
+entity Director extends por_tipo {
+    id_persona key
+}
+
+entity Interprete extends por_tipo {
+    id_persona key
+    nombre_artistico
+}
+
+entity Personaje {
+    id_personaje key
+    nombre
+    descripcion
+}
+
+relationship ha_creado {
+    Creador[1..N] -> Serie[1..N]
+}
+
+relationship dirige_episodio {
+    Director[1..N] -> Episodio[1..N]
+}
+
+relationship actuacion {
+    Interprete[1..N] -> Personaje[1..N]
+    minutos
+    version_del_personaje
+}
+
+entity Plataforma {
+    id_plataforma key
+    nombre_comercial
+    url
+}
+
+weak entity Derechos_Emision {
+    fecha_inicio partial-key
+    fecha_fin
+}
+weak relationship licencia_plataforma {
+    Plataforma[1..1] -> Derechos_Emision[1..N]
+}
+
+weak relationship derechos_serie {
+    Serie[1..1] -> Derechos_Emision[1..N]
+}
+
+entity Usuario {
+    id_usuario key
+    email
+    nombre_usuario
+}
+
+weak entity Lista {
+    numero_lista partial-key
+    nombre
+    descripcion
+}
+
+relationship favorita {
+    Usuario[0..N] -> Plataforma[0..N]
+}
+
+relationship valora_serie {
+    Usuario[0..N] -> Serie[0..N]
+    puntuacion
+    comentario
+}
+
+relationship valora_episodio {
+    Usuario[0..N] -> Episodio[0..N]
+    puntuacion
+}
+
+weak relationship crea_lista {
+    Usuario[1..1] -> Lista[0..N]
+}
+
+relationship incluye_serie {
+    Lista[0..N] -> Serie[0..N]
+}
+
+relationship compartida_con {
+    Lista[0..N] -> Usuario[0..N]
+}
+```
 
 
 ---

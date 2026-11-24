@@ -1,0 +1,106 @@
+erdiagram ColegioPrimaria
+notation = crowsfoot
+
+entity Estudiante {
+    numero_expediente key
+    nombre
+    apellido_1
+    apellido_2
+    sexo
+    fecha_nacimiento
+}
+
+hierarchy por_tipo Estudiante partial
+
+entity Estudiante_Especial extends por_tipo {
+    numero_expediente key
+    descripcion
+    atencion_especial
+}
+
+entity Persona {
+    nif key
+    nombre
+    apellido_1
+    apellido_2
+    telefono
+    direccion
+}
+
+hierarchy tipo_persona Persona total overlapping
+
+entity Tutora extends tipo_persona {
+    nif key
+    profesion
+}
+
+entity Docente extends tipo_persona {
+    nif key
+    salario
+    cuenta
+}
+
+relationship a_cargo_de {
+    Tutora[1..N] -> Estudiante[1..N]
+    relacion
+}
+
+entity Curso {
+    numero_curso key
+    descripcion_curso
+}
+
+relationship responsable_de {
+    Docente[1..1] -> Curso[0..1]
+}
+
+weak entity Objetivo_Aprendizaje {
+    codigo_objetivo partial-key
+    descripcion_objetivo
+}
+
+weak relationship tiene {
+    Curso[1..1] -> Objetivo_Aprendizaje[1..N]
+}
+
+entity Departamento {
+    codigo_departamento key
+    nombre_departamento
+}
+
+entity Asignatura {
+    codigo_asignatura key
+    nombre_asignatura
+}
+
+relationship pertenece_a {
+    Docente[1..N] -> Departamento[1..1]
+}
+
+relationship organiza {
+    Departamento[1..1] -> Asignatura[1..N]
+}
+
+associative entity Asignatura_Curso {
+    horas
+}
+
+associative relationship se_imparte_en {
+    Asignatura[1..1] -> Asignatura_Curso[1..N]
+}
+
+associative relationship consta_de {
+    Curso[1..1] -> Asignatura_Curso[1..N]
+}
+
+relationship imparte {
+    Docente[1..1] -> Asignatura_Curso[1..N]
+}
+
+relationship matriculado {
+    Estudiante[1..N] -> Asignatura_Curso[1..N]
+    fecha
+    nota_1
+    nota_2
+    nota_3
+}
